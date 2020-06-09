@@ -11,10 +11,16 @@ public class ProductPage extends AbstractPage {
     @FindBy(xpath = "//li[@class=\"description_tab active\"]/a")
     private WebElement descriptionTab;
 
-    @FindBy(css = ".woocommerce-Tabs-panel--description > h2")
+    @FindBy(css = ".woocommerce-Tabs-panel--description p")
     private WebElement descriptionText;
 
-    public boolean checkAddToBusketButtonIsPresent() {
+    @FindBy(css = ".reviews_tab > a")
+    private WebElement reviewsTab;
+
+    @FindBy(css = "div#comments > p.woocommerce-noreviews")
+    private WebElement reviewsText;
+
+    public boolean checkAddToBasketButtonIsPresent() {
         return addToBasketButton.isDisplayed();
     }
 
@@ -24,7 +30,16 @@ public class ProductPage extends AbstractPage {
     }
 
     public boolean checkForDescription() {
-        return descriptionText.isDisplayed();
+        return descriptionText.getText()!=null;
+    }
+
+    public ProductPage clickOnReviewsTab() {
+        reviewsTab.click();
+        return this;
+    }
+
+    public boolean checkForReviews(){
+        return  reviewsText.isDisplayed();
     }
 
 }

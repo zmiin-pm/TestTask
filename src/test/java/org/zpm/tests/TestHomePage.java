@@ -9,9 +9,7 @@ import org.zpm.Pages.ShopPage;
 
 public class TestHomePage extends BaseTest {        // Тесты для раздела №2 (HOME PAGE) из пункта 3.2
 
-    HomePage home;
-    ShopPage shop;
-    ProductPage productPage;
+
 
     @BeforeMethod
     public void beforeMethod() {
@@ -21,22 +19,29 @@ public class TestHomePage extends BaseTest {        // Тесты для раз�
     }
 
     @Test(priority = 1)
-    public void WhetherTheHomePageHasThreeArrivalsOnly() {
+    public void whetherTheHomePageHasThreeArrivalsOnly() {
         Assert.assertTrue(home.countArrivals() == 3);
     }
 
     @Test(priority = 2)
-    public void WhetherItIsNavigatingToNextPage() {
+    public void whetherItIsNavigatingToNextPage() {
         productPage = home.clickOnProduct();                                   // клик по случайному новому продукту и преход на страницу продкукта
-        Assert.assertTrue(productPage.checkAddToBusketButtonIsPresent());      // проверка наличия кнопки добавления в корзину
+        Assert.assertTrue(productPage.checkAddToBasketButtonIsPresent());      // проверка наличия кнопки добавления в корзину
     }
 
     @Test(priority = 3)
-    public void ShouldBeADescriptionRegardingTheBook() {
+    public void shouldBeADescriptionRegardingTheBook() {
         productPage = home.clickOnProduct();                    // переход на страницу продукта
         Assert.assertTrue(productPage
                 .clickOnDescriptionTab()                        // клик по вкладке описания
                 .checkForDescription());                        // проверка наличия описания
+    }
+
+    @Test
+    public void shouldBeAReviewsRegardingTheBook(){
+        productPage = home.clickOnProduct();                    // переход на страницу продукта
+        productPage.clickOnReviewsTab();
+        Assert.assertTrue(productPage.checkForReviews());
     }
 
 }

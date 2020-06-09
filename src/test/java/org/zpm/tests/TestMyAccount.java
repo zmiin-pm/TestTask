@@ -10,10 +10,6 @@ import org.zpm.Pages.MyAccountPage;
 
 public class TestMyAccount extends BaseTest {     //  Тесты для раздела №1 (MY ACCOUNT) из пункта 3.2
 
-    HomePage home;
-    MyAccountPage accountPage;
-
-
     @BeforeMethod
     public void beforeMethod() {
         home = new HomePage().open();               // переход на страницу http://practice.automationtesting.in/

@@ -11,6 +11,9 @@ public class BasketPage extends AbstractPage {
     @FindBy(css = ".order-total .woocommerce-Price-amount.amount")
     WebElement totalPrice;
 
+    @FindBy(css = ".checkout-button")
+    WebElement proceedToCheckoutButton;
+
     public int getSubtotalPrice() {
         return Integer.parseInt(subtotalPrice.getText().substring(1,4));
     }
@@ -21,5 +24,10 @@ public class BasketPage extends AbstractPage {
 
     public boolean checkSubPriceAndPriceNotNull() {
         return ((getSubtotalPrice() != 0 && (getTotalPrice() != 0)));
+    }
+
+    public PaymentPage clickProceedToCheckoutButton(){
+        proceedToCheckoutButton.click();
+        return new PaymentPage();
     }
 }

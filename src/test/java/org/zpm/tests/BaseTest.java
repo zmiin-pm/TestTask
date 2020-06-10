@@ -14,13 +14,15 @@ public class BaseTest {
     ProductPage productPage;
     MyAccountPage accountPage;
     BasketPage basket;
+    PaymentPage payment;
+    OrderConfirmationPage confirmation;
 
     @BeforeSuite
     public void beforeSuite() {
         DriverHolder.INSTANCE.initDriver(       // открытие браузера ХРОМ
                 DriverType.CHROME,
                 20,  // implicitly
-                0); // explicitly
+                10); // explicitly
     }
 
     @AfterSuite

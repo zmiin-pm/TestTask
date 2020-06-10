@@ -2,6 +2,7 @@ package org.zpm.tests;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.zpm.Pages.HomePage;
 
@@ -9,13 +10,13 @@ public class TestShopPage extends BaseTest {
 
     @BeforeClass
     public void beforeClass() {
-        home = new HomePage().open();       // переход на страницу http://practice.automationtesting.in/
-        shop = home.clickShopMenuItem();    // переход по ссылке Shop
+        home = new HomePage().open();            // переход на страницу http://practice.automationtesting.in/
+        shop = home.clickShopMenuItem();         // переход по ссылке Shop
+        shop.clickRandomAddToBasketButton();     // добавление в корзину случайного товара
     }
 
     @Test
     public void userCanViewThatBookInTheMenuItemWithPrice() {
-        shop.clickRandomAddToBasketButton();                    // добавление в корзину случайного товара
         try {
             Thread.sleep(3000);                             // ожидание необходимо для обновления цены
         } catch (InterruptedException e) {
@@ -27,18 +28,32 @@ public class TestShopPage extends BaseTest {
                         (shop.getTotalPriceInBasket() != 0));       // цена товаров в корзине не нулевая
     }
 
-    @Test(dependsOnMethods = "userCanViewThatBookInTheMenuItemWithPrice")    // без добавления товара тест даст отрицательный результат
-    public void  userCanFindTotalAndSubtotalValues(){
+    @Test(priority = 1)
+    // без добавления товара тест даст отрицательный результат
+    public void userCanFindTotalAndSubtotalValues() {
         basket = shop.clickShoppingCart();              // переход в корзину по ссылке
         Assert.assertTrue(basket
                 .checkSubPriceAndPriceNotNull());       // проверка, что цена товара и общая цена не нулевые
     }
 
-    @Test(dependsOnMethods = "userCanViewThatBookInTheMenuItemWithPrice")   // для сравнения цен нужны предыдущие тесты
-    public void totalAlwaysBiggerSubtotal(){
-        basket = shop.clickShoppingCart();              // переход в корзину по ссылке
+    @Test(priority = 2)
+    public void totalAlwaysBiggerSubtotal() {
         Assert.assertTrue((basket.getTotalPrice()) > (basket.getSubtotalPrice()));
     }
 
+    @Test(priority = 3)
+    public void userCanViewBillingOrderAdditionalDetailsAndPaymentGateway() {
+        payment = basket.clickProceedToCheckoutButton();
+        Assert.assertTrue(payment.checkoutAllDetailsIsPresent());
+    }
 
+    @Test(priority = 4)     // Все условия, описанные в тест-кейсе не могут быть выполнены без регистрации аккаунта(тест-кейс - негативный)
+    public void orderConfirmationPageWithOrderBankCustomerAndBillingDetails(){
+        payment
+                .setBillingDetails()
+                .setRandomPaymentMethod();
+        confirmation = payment.clickPlaceOrderButton();
+        Assert.assertTrue(confirmation.checkoutDetailsIsPresent());
+
+    }
 }
